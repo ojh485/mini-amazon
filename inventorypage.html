@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<br><br>
+
+<h2>
+  Your Inventory
+  <a href="{{ url_for('sellers.addproduct') }}" type="button" class="btn btn-light" >Add Product</a>
+</h2>
+
+<table id="invenTable" class='table table-hover table-bordered container'>
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Product Name</th>
+        <th data-type="number" scope="col">Price</th>
+        <th data-type="number" scope="col">Quantity</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in inventory %}
+        <tr>
+          <th scope = "row"><a href="{{ url_for('products.product_page', pid = i.pid) }}">{{i.name}}</a></td>
+          <td>{{i.price}}</td>
+          <td>{{i.quantity}}</td>
+          <td><a href="{{ url_for('sellers.editInventory', id = i.id) }}">Edit</a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
+  <br><br>
+  
+  <h2>Your Sales</h2>
+
+  <form id = "searchOrders" action="{{ url_for('sellers.seller_home_page') }}" method="post" novalidate>
+    {{ searchForm.hidden_tag() }}
+    <p>
+      {{ searchForm.search.label }}<br/>
+      {{ searchForm.search(size=32) }}<br/>
+    </p>
+    {{ searchForm.submit(class_="btn btn-light") }}
+  </form>
+
+  <table id="orderTable" class='table table-hover table-bordered container'>
+    <thead class="thead-dark">
+      <tr>
+        <th data-type='email' scope="col">Buyer</th>
+        <th scope="col">Shipping Address</th>
+        <th scope="col">Product Name</th>
+        <th data-type="number" scope="col">Quantity</th>
+        <th data-type="datetime-local" scope="col">Time Purchased</th>
+        <th scope="col">Order Status</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for o in orders %}
+        <tr>
+          <th scope = "row"><a style="color:#270682" href="{{ url_for('users.showPublicView', uid=o.uid) }}" >{{o.email}}</a></td>
+          <td>{{o.address}}</td>
+          <td>{{o.name}}</td>
+          <td>{{o.quantity}}</td>
+          <td>{{o.time_purchased}}</td>
+          <td>{{o.order_status}}</td>
+          <td>
+            <form action="{{ url_for('sellers.seller_home_page', purchaseID = o.id) }}" method="post" novalidate>
+              {{ fulfill.submit(class_="btn btn-white") }}
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% endblock %}

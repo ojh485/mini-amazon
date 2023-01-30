@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>{{title}}</h1>
+
+<table class='table table-hover table-bordered container'>
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Product Name</th>
+        <th scope="col">Price</th>
+        <th scope="col">Category</th>
+        <th scope="col">Description</th>
+        <th scope="col">Average Review</th>
+        <th scope="col">Image</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">{{product.name}}</th>
+        <td>{{product.price}}</td>
+        <td>{{product.category}}</td>
+        <td>{{product.description}}</td>
+        <td>{{product.average}}</td>
+        <td><img src={{product.image}} style="height:200px; width: 300px;"></td>
+      </tr>
+    </tbody>
+  </table>
+  {% if current_user.is_authenticated %}
+  <table class='table table-hover table-bordered container'>
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Add to Cart</th>
+        <th scope="col">Seller</th>
+        <th scope="col">Quantity</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for seller in sellers%}
+        <tr>
+          <th scope = "row">
+            <form action="{{ url_for('products.product_page', pid = product.id, sid = seller.uid) }}" method="post" novalidate>
+              {{ addToCart.submit(class_="btn btn-white") }}
+              {{ addToCart.addQuantity }}
+            </form>
+          </td>
+          <td><a style="color:#270682" href="{{ url_for('users.showPublicView', uid=seller.uid) }}" >{{seller.name}}</a></td>
+          <td>{{seller.quantity}}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+
+<table class='table table-hover table-bordered container'>
+  <thead class = 'thead-dark'>
+    <tr>
+      <th scope = "col">Average Rating</th>
+      <th scope = "col">Number of Reviews</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope = "row">{{average}}</th>
+      <th scope = "row">{{count}}</th>
+    </tr>
+  </tbody>
+  </table>
+
+
+
+
+<table class='table table-hover table-bordered container'>
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Review</th>
+      <th scope="col">Stars</th>
+      <th scope="col">Time Reviewed</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for review in feedback%}
+      <tr>
+        <td>{{review.review}}</td>
+        <td>{{review.stars}}</td>
+        <td>{{review.time_reviewed}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% if current_user.is_authenticated %}
+  <!-- create form here for new review -->
+  <h3>Leave or Update a Product Review</h3>
+  <h5>If you already have written a review, if you submit a new one, it will override your previous one.</h5>
+  <form action="" method="post">
+    {{ form.hidden_tag() }}
+    <p>
+      {{ form.stars.label }}<br/>
+      {{ form.stars(size=32) }}<br/>
+      {% for error in form.stars.errors %}
+      <span style="color: red;">[{{ error }}]</span>
+      {% endfor %}
+    </p>
+    <p>
+      {{ form.review.label }}<br/>
+      {{ form.review(size=32) }}<br/>
+      {% for error in form.review.errors %}
+      <span style="color: red;">[{{ error }}]</span>
+      {% endfor %}
+    </p>
+    <p>{{ form.submit() }}</p>
+  </form>
+
+{% endif %}
+
+<p><a href="{{ url_for('index.index') }}">Back</a> to Index!</p>
+
+{% endblock %}

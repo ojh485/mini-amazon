@@ -1,0 +1,412 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class="container">
+
+  <!-- Right Card with profile picture -->
+  <div class="main-body">
+        <div class="row gutters-sm">
+          <div class="col-md-4 mb-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex flex-column align-items-center text-center">
+                  <img src="https://cdn-icons-png.flaticon.com/512/5087/5087579.png"  class="rounded-circle" width="150">
+                  <div class="mt-3">
+                    <h4>User Profile</h4>
+                    {% if isSeller %}
+                    <p class="text-secondary mb-1">Buyer & Seller</p>
+                    {% else %}
+                    <p class="text-secondary mb-1">Buyer</p>
+                    {% endif %}
+                    <p class="text-muted font-size-sm">Edit Account:</p>
+                    <button class="btn btn-outline-primary" data-toggle="modal" data-target=".modal-one">Profile</button>
+                    <button class="btn btn-outline-primary" data-toggle="modal" data-target=".modal-two" >Balance</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Left card with user's details -->
+          <div class="col-md-8">
+            <div class="card mb-3">
+              <div class="card-body">
+                <hr>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">First Name</h6>
+                  </div>
+                  <div class="col-sm-9 text-secondary">
+                    {{current_user.firstname}}
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">Last Name</h6>
+                  </div>
+                  <div class="col-sm-9 text-secondary">
+                    {{current_user.lastname}}
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">Email</h6>
+                  </div>
+                  <div class="col-sm-9 text-secondary">
+                    {{current_user.email}}
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">Address</h6>
+                  </div>
+                  <div class="col-sm-9 text-secondary">
+                    {{current_user.address}}
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">Balance</h6>
+                  </div>
+                  <div class="col-sm-9 text-secondary">
+                    ${{current_user.balance}}
+                  </div>
+                </div>
+                <hr>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <!-- Setup the different tabs for the bottom card -->
+  <div class="container emp-profile">
+    <form method="post">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="profile-head">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                      <li class="nav-item">
+                        <a class="nav-link active " id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="false">Purchases</a>
+                      </li>
+                      {% if isSeller %}
+                      <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Sales</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="profit-tab" data-toggle="tab" href="#profit" role="tab" aria-controls="profile" aria-selected="false">Profits</a>
+                      </li>
+                      {% endif %}
+                      <li class="nav-item">
+                        <a class="nav-link " id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="home" aria-selected="true">Reviews</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link " id="rating-tab" data-toggle="tab" href="#rating" role="tab" aria-controls="home" aria-selected="true">Ratings</a>
+                  </li>
+                      <li class="nav-item">
+                          <a class="nav-link " id="info-tab" data-toggle="tab" href="#info" role="tab" aria-controls="home" aria-selected="true">Info</a>
+                      </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+          
+            <div class="col-md-12">
+              <div class="tab-content profile-tab" id="myTabContent">
+                <!-- home tab -->
+                    <div class="tab-pane fade show " id="info" role="tabpanel" aria-labelledby="home-tab">
+                                 <div class="row text-secondary" style="margin-bottom: 10px;">
+                                      Welcome, feel free to browse your history and edit your profile!
+                                      
+                                </div>          
+                    </div>
+                    <!-- profit tab -->
+                    <div class="tab-pane fade show " id="profit" role="tabpanel" aria-labelledby="home-tab">
+                      <div class="row text-secondary" style="margin-bottom: 10px;">
+                          
+                           <div><img src={{myImg}}></div>
+                     </div>          
+                    </div>
+                    <!-- purchases tab -->
+                    <div class="tab-pane fade show active " id="home" role="tabpanel" aria-labelledby="home-tab">
+                      <div style="padding-bottom: 15px;">
+                        <form action="{{ url_for('users.updateAccount') }}" method="post" novalidate>
+                          <div style="display: flex;">
+                            {{ filter_form.category(value='All', class="form-inline btn-outline-primary")}}
+                            {{ filter_form.search(class="form-inline")}}
+                            {{ filter_form.submit(class_="btn btn-secondary") }}
+                          </div>
+                        </form>
+                      </div>
+                                   <div class="row">
+                                      <div class="col-md-2">
+                                          <p>Total Price</p>
+                                      </div>
+                                      <div class="col-md-3">
+                                        <p>Item</p>
+                                      </div>
+                                      <div class="col-md-2">
+                                          <p>Quantity</p>
+                                      </div>
+                                      <div class="col-md-2">
+                                        <p>Delivery Status</p>
+                                      </div>
+                                     <div class="col-md-3">
+                                        <p>Date</p>
+                                     </div>
+                                  </div>
+                                  {% for p in purchases%}
+                                  <hr>
+                                  <div class="row">
+                                      <div class="col-md-2">
+                                          <label>${{p[0]}}</label>
+                                      </div>
+                                      <div class="col-md-3">
+                                          <label>{{p[1]}}</label>
+                                      </div>
+                                      <div class="col-md-2">
+                                        <label>{{p[2]}}</label>
+                                      </div>
+                                     <div class="col-sm-2">
+                                        <label>{{p[3]}}</label>
+                                     </div>
+                                     <div class="col-sm-3">
+                                      <a href="{{ url_for('carts.order_page', uid = current_user.id, time = p[4]) }}">{{p[4]}}</a>
+                                   </div>
+                                  </div>
+                                  {% endfor %}
+                    </div>
+                    <!-- sales tab -->
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="row">
+                                      <div class="col-md-2">
+                                          <p>Total Price</p>
+                                      </div>
+                                      <div class="col-md-3">
+                                        <p>Item</p>
+                                      </div>
+                                      <div class="col-md-2">
+                                          <p>Quantity</p>
+                                      </div>
+                                      <div class="col-md-2">
+                                        <p>Delivery Status</p>
+                                      </div>
+                                     <div class="col-md-3">
+                                        <p>Date</p>
+                                     </div>
+                                  </div>
+                                  {% for p in sells%}
+                                  <hr>
+                                  <div class="row">
+                                      <div class="col-md-2">
+                                          <label>${{p[0]}}</label>
+                                      </div>
+                                      <div class="col-md-3">
+                                          <label>{{p[1]}}</label>
+                                      </div>
+                                      <div class="col-md-2">
+                                        <label>{{p[2]}}</label>
+                                      </div>
+                                     <div class="col-sm-2">
+                                        <label>{{p[3]}}</label>
+                                     </div>
+                                     <div class="col-sm-3">
+                                      <a>{{p[4]}}</a>
+                                   </div>
+                                  </div>
+                                  {% endfor %}
+                    </div>
+                    <!-- product reviews tab -->
+                    <div class="tab-pane fade show " id="review" role="tabpanel" aria-labelledby="review-tab">
+                      <div class="row">
+                        <div class="col-md-2">
+                            <p>Product Name</p>
+                        </div>
+                        <div class="col-md-3">
+                          <p>Review</p>
+                        </div>
+                        <div class="col-md-2">
+                            <p>Stars</p>
+                        </div>
+                        <div class="col-md-2">
+                          <p>Time Reviewed</p>
+                        </div>
+                        <div class="col-md-2">
+                          <p>Delete</p>
+                        </div>
+                    </div>
+                    {% for p in reviews%}
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <a href="{{ url_for('products.product_page', pid = p.pid) }}">{{p.name}}</a>
+                        </div>
+                        <div class="col-md-3">
+                            <label>{{p.review}}</label>
+                        </div>
+                        <div class="col-md-2">
+                          <label>{{p.stars}}</label>
+                        </div>
+                       <div class="col-sm-2">
+                          <label>{{p.time_reviewed}}</label>
+                       </div>
+                       <form action="{{ url_for('users.updateAccount', reviewUID = p.uid, reviewPID = p.pid)}}" method="post" novalidate>
+                        {{ delete.submit(class_="btn btn-white") }}
+                      </form>
+                    </div>
+                    {% endfor %}
+      </div>         
+            <!-- ratings tab -->
+            <div class="tab-pane fade show " id="rating" role="tabpanel" aria-labelledby="rating-tab">
+              <div class="row">
+                <div class="col-md-2">
+                    <p>Seller Name</p>
+                </div>
+                <div class="col-md-3">
+                  <p>Rating</p>
+                </div>
+                <div class="col-md-2">
+                    <p>Stars</p>
+                </div>
+                <div class="col-md-2">
+                  <p>Time Reviewed</p>
+                </div>
+                <div class="col-md-2">
+                  <p>Delete</p>
+                </div>
+            </div>
+            {% for p in ratings%}
+            <hr>
+            <div class="row">
+                <div class="col-md-2">
+                    <a href="{{ url_for('users.showPublicView', uid = p.sid) }}">{{p.seller}}</a>
+                </div>
+                <div class="col-md-3">
+                    <label>{{p.rating}}</label>
+                </div>
+                <div class="col-md-2">
+                  <label>{{p.stars}}</label>
+                </div>
+              <div class="col-sm-2">
+                  <label>{{p.time_reviewed}}</label>
+              </div>
+              <form action="{{ url_for('users.updateAccount', ratingUID = p.uid, ratingSID = p.sid)}}" method="post" novalidate>
+                {{ deleteRating.submit(class_="btn btn-white") }}
+              </form>
+            </div>
+            {% endfor %}
+      </div> 
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>     
+    
+    <!-- Modal for changing user's profile details-->
+    <div class="modal fade modal-one" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit User Profile</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+            <form action="" method="post">
+              {{ form.hidden_tag() }}
+              <p>
+                {{ form.firstname.label }}<br/>
+                {{ form.firstname(size=32, value=current_user.firstname) }}<br/>
+                {% for error in form.firstname.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+              </p>
+              <p>
+                {{ form.lastname.label }}<br/>
+                {{ form.lastname(size=32, value=current_user.lastname) }}<br/>
+                {% for error in form.lastname.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+              </p>
+              <p>
+                {{ form.email.label }}<br/>
+                {{ form.email(size=32, value=current_user.email) }}<br/>
+                {% for error in form.email.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+              </p>
+              <p>
+                {{ form.address.label }}<br/>
+                {{ form.address(size=32, value=current_user.address) }}<br/>
+                {% for error in form.address.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+              </p>
+              <p>
+                {{ form.password.label }}<br/>
+                {{ form.password(size=32) }}<br/>
+                {% for error in form.password.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+              </p>
+              <p>{{ form.submit() }}</p>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+     <!-- Modal for changing user's balance changes-->
+     <div class="modal fade modal-two" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit User Profile</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+            <form action="" method="post">
+              {{ bal_form.hidden_tag() }}
+              <p>
+                {{ bal_form.deposit.label }}<br/>
+                {{ bal_form.deposit(size=32, value=0) }}<br/>
+                {% for error in bal_form.deposit.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+              </p>
+              <p>
+                {{ bal_form.withdrawl.label }}<br/>
+                {{ bal_form.withdrawl(size=32, value=0) }}<br/>
+                {% for error in bal_form.withdrawl.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+              </p>
+              <p>{{ form.submit() }}</p>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}

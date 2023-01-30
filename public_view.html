@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+  <div class="main-body">
+    <h2 style="color: #1652f0;">Public View</h2>
+    <div class="container  emp-profile ">
+          <div class="row ">
+              <div class="col-md-6 ">
+
+                <!-- Setup different tabs -->
+                  <div class="profile-head">
+                      <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                          <a class="nav-link active " id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="false">General</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " id="rating-tab" data-toggle="tab" href="#info" role="tab" aria-controls="home" aria-selected="true">Ratings</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link " id="write-tab" data-toggle="tab" href="#write" role="tab" aria-controls="home" aria-selected="true">Leave a Rating</a>
+                      </li>
+                      </ul>
+                  </div>
+              </div>
+          </div>
+          
+              <div class="col-md-12">
+                <div class="tab-content profile-tab" id="myTabContent">
+
+                  <!-- Ratings page -->
+
+                      <div class="tab-pane fade show " id="info" role="tabpanel" aria-labelledby="rating-tab">                                          
+                        <div class="row">
+                          <table class='table table-hover table-bordered container'>
+                            <thead class = 'thead-dark'>
+                              <tr>
+                                <th scope = "col">Average Rating</th>
+                                <th scope = "col">Number of Ratings</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <th scope = "row">{{average}}</th>
+                                <th scope = "row">{{count}}</th>
+                              </tr>
+                            </tbody>
+                            </table>
+                                            <div class="col-md-3">
+                                              <p>Rating</p>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>Stars</p>
+                                            </div>
+                                            <div class="col-md-2">
+                                              <p>Time Reviewed</p>
+                                            </div>
+                                        </div>
+                                        {% for p in feedback%}
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label>{{p.rating}}</label>
+                                            </div>
+                                            <div class="col-md-2">
+                                              <label>{{p.stars}}</label>
+                                            </div>
+                                          <div class="col-sm-2">
+                                              <label>{{p.time_reviewed}}</label>
+                                          </div>
+                                        </div>
+                                        {% endfor %}
+                            
+                      </div>
+
+
+                      <!-- User profile page -->
+                      <div class="tab-pane fade show active " id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="row">
+                          <div class="col-sm-3">
+                            <h6 class="mb-0">Account #:</h6>
+                          </div>
+                          <div class="col-sm-9 text-secondary">
+                            {{user_view.id}}
+                          </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                          <div class="col-sm-3">
+                            <h6 class="mb-0">First Name:</h6>
+                          </div>
+                          <div class="col-sm-9 text-secondary">
+                            {{user_view.firstname}}
+                          </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                          <div class="col-sm-3">
+                            <h6 class="mb-0">Last Name:</h6>
+                          </div>
+                          <div class="col-sm-9 text-secondary">
+                            {{user_view.lastname}}
+                          </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                          <div class="col-sm-3">
+                            <h6 class="mb-0">Role(s):</h6>
+                          </div>
+                          {% if isSeller %}
+                          <div class="col-sm-9 text-secondary">
+                            Buyer & Seller
+                          </div>
+                          {% else %}
+                          <div class="col-sm-9 text-secondary">
+                            Buyer
+                          </div>
+                          {% endif %}
+                        </div>
+                        <hr>
+                        {% if isSeller %}
+                        <div class="row">
+                          <div class="col-sm-3">
+                            <h6 class="mb-0">Email:</h6>
+                          </div>
+                          <div class="col-sm-9 text-secondary">
+                            {{user_view.email}}
+                          </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                          <div class="col-sm-3">
+                            <h6 class="mb-0">Address:</h6>
+                          </div>
+                          <div class="col-sm-9 text-secondary">
+                            {{user_view.address}}
+                          </div>
+                        </div>
+                        <hr>
+                        {% endif %}
+                        
+                                    
+                                   
+                      </div>
+
+                      <!-- Write ratings page -->
+                      <div class="tab-pane fade show " id="write" role="tabpanel" aria-labelledby="write-tab">
+                        <form action="" method="post">
+                          {{ form.hidden_tag() }}
+                          <p>
+                            {{ form.stars.label }}<br/>
+                            {{ form.stars(size=32) }}<br/>
+                            {% for error in form.stars.errors %}
+                            <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                          </p>
+                          <p>
+                            {{ form.rating.label }}<br/>
+                            {{ form.rating(size=32) }}<br/>
+                            {% for error in form.rating.errors %}
+                            <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                          </p>
+                          <p>{{ form.submit() }}</p>
+                        </form>
+                      </div>
+                  </div>
+              </div>
+          </div>
+  
+
+        </div>
+      </div>
+  </div>
+
+
+{% endblock %}

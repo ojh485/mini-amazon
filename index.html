@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<br><br>
+
+<h2>Products for sale:</h2>
+
+<form action="{{ url_for('index.index', searchResult = searchResult, category = category, pageNum = pageNum, sort = sort, minRating = minRating, maxPrice = maxPrice) }}" method="post" novalidate>
+  {{ form.hidden_tag() }}
+  <p>
+    {{ form.search.label }}<br/>
+    {{ form.search(size=32) }}<br/>
+  </p>
+  {{ form.submit(class_="btn btn-black") }}
+
+</form>
+
+<br/>
+<form action="{{ url_for('index.index', searchResult = searchResult, category = category, pageNum = pageNum, sort = sort, minRating = minRating, maxPrice = maxPrice) }}" method="post" novalidate>
+  <p>
+  {{ categoryForm.category.label}}
+  </p>
+  <div style="display: flex;">
+    {{ categoryForm.category(class="form-inline")}}
+    {{ categoryForm.submit(class_="btn btn-black") }} 
+  </div>
+</form>
+<br>
+<div style="display: flex;">
+  </br>
+  <form action="{{ url_for('index.index', searchResult = searchResult, category = category, pageNum = pageNum, sort = sort, minRating = minRating, maxPrice = maxPrice) }}" method="post" novalidate>
+    <p>
+    {{ ratingSort.minRating.label}}&emsp; &emsp;
+    </p>
+    <div style="display: flex;">
+      {{ ratingSort.minRating(class="form-inline")}}
+      {{ ratingSort.submit(class_="btn btn-black") }} &emsp; &emsp;
+    </div>
+  </form>
+
+  <form action="{{ url_for('index.index', searchResult = searchResult, category = category, pageNum = pageNum, sort = sort, minRating = minRating, maxPrice = maxPrice) }}" method="post" novalidate>
+    <p>
+    {{ filterPrice.maxPrice.label}}
+    </p>
+    <div style="display: flex;">
+      {{ filterPrice.maxPrice(class="form-inline")}}
+      {{ filterPrice.submit(class_="btn btn-black") }}
+    </div>
+  </form>
+</div>
+
+<br/>
+<div style="display: flex;">
+  <form action="{{ url_for('index.index', searchResult = searchResult, category = category, pageNum = pageNum + - 1, sort = sort, minRating = minRating, maxPrice = maxPrice) }}" method="post" novalidate>
+    {{ prevPage.submit(class_="btn btn-black") }}
+  </form>
+
+  <form action="{{ url_for('index.index', searchResult = searchResult, category = category, pageNum = pageNum + 1, sort = sort, minRating = minRating, maxPrice = maxPrice) }}" method="post" novalidate>
+      {{ nextPage.submit(class_="btn btn-black") }}
+  </form>
+</div>
+<br>
+<p>Page:  {{pageNum}}</p>
+<br/>
+
+<table class='table table-hover table-bordered container'>
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Product Name</th>
+      <th scope="col">
+        <form action="{{ url_for('index.index', searchResult = searchResult, category = category, pageNum = pageNum + - 1, sort = 'price', minRating = minRating, maxPrice = maxPrice) }}" method="post" novalidate>
+          {{ priceSort.submit(class_="btn btn-white") }}
+        </form>
+      </th>
+      <th scope="col">Category</th>
+      <th scope="col">Description</th>
+      <th scope="col">
+        <form action="{{ url_for('index.index', searchResult = searchResult, category = category, pageNum = pageNum + - 1, sort = 'avg', minRating = minRating, maxPrice = maxPrice) }}" method="post" novalidate>
+          {{ ratingButton.submit(class_="btn btn-white") }}
+        </form>
+      </th>
+      <th scope="col">Image</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for product in avail_products%}
+      <tr>
+        <th scope = "row"><a href="{{ url_for('products.product_page', pid = product.id) }}">{{product.name}}</a></td>
+        <td>{{product.price}}</td>
+        <td>{{product.category}}</td>
+        <td>{{product.description}}</td>
+        <td>{{product.average}}</td>
+        <td><img src={{product.image}} style="height:200px; width: 300px;"></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<br><br>
+{% if current_user.is_authenticated %}
+
+<!-- Produc Recommendations -->
+<h2>Your Recommendations!</h2>
+<table class='table table-hover table-bordered container'>
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Product Name</th>
+      <th scope="col">Price</th>
+      <th scope="col">Category</th>
+      <th scope="col">Description</th>
+      <th scope="col">Image</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in rec%}
+      <tr>
+        <th scope="row"><a href="{{ url_for('products.product_page', pid = r.id) }}">{{r.name}}</a></th>
+        <td>{{r.price}}</td>
+        <td>{{r.category}}</td>
+        <td>{{r.description}}</td>
+        <td><img src={{r.image}} style="height:200px; width: 300px;"></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% else %}
+
+{% endif %}
+
+{% endblock %}

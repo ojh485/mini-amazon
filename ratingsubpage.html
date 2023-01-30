@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+  .table{
+    background-color:  #00aeff;
+  }
+  .table thead{
+    background-color:  #313baf;
+  }
+</style>
+
+<!-- get list + summary -->
+<form action="" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <p>
+      {{ form.sid.label }}<br/>
+      {{ form.sid(size=32) }}<br/>
+    </p>
+    {{ form.submit(class_="btn btn-black") }}
+  </form>
+  
+  <table class='table table-hover table-bordered container'>
+    <thead class = 'thead-dark'>
+      <tr>
+        <th scope = "col">Average Rating</th>
+        <th scope = "col">Number of Ratings</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope = "row">{{summary_stats}}</th>
+        <th scope = "row">{{count}}</th>
+      </tr>
+    </tbody>
+    </table>
+
+  <table class='table table-hover table-bordered container'>
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">UID</th>
+          <th scope="col">SID</th>
+          <th scope="col">Rating</th>
+          <th scope="col">Stars</th>
+          <th scope="col">time_reviewed</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for rating in feedback%}
+          <tr>
+            <th scope="row">{{rating.id}}</th>
+            <td>{{rating.uid}}</td>
+            <td>{{rating.sid}}</td>
+            <td>{{rating.rating}}</td>
+            <td>{{rating.stars}}</td>
+            <td>{{rating.time_reviewed}}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {% endblock %}

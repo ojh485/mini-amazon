@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<p></p>
+<h1> {{title}}</h1>
+
+<style>
+  .table{
+    background-color:  #00aeff;
+  }
+  .table thead{
+    background-color:  #313baf;
+  }
+</style>
+
+<table class='table table-hover table-bordered container'>
+  <thead class="thead">
+    <tr style="color:#ffffff">
+      <!--<th scope="col">Id</th> -->
+      <!--<th scope="col">Uid</th> -->
+      <th scope="col">Product</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Price Per Unit</th>
+      <th scope="col">Seller</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for c in carts%}
+      <tr style="color:#ffffff">
+        <td>{{c.name}}</td>
+        <!--<td>{{c.uid}}</td> -->
+        <!--<td>{{c.pid}}</td> -->
+        <td>{{c.quantity}}</td>
+        <td>${{c.price}}</td>
+        <td><a style="color:#270682" href="{{ url_for('users.showPublicView', uid=c.sid) }}" >{{c.seller}}</a></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+<h3>Total Cart Price: ${{total}} &emsp; &emsp; &emsp; Your Balance: ${{current_user.balance}}</h3>
+<p></p>
+
+
+<button class="btn btn-info" data-toggle="modal" data-target=".modal-two" >Change Item Quantity</button>
+<button class="btn btn-danger" data-toggle="modal" data-target=".modal-one" >Remove Item from Cart</button>  
+<p></p>
+<h6>If the order does not place, you have insufficient balance, or a seller has insufficient stock!</h6>
+<p></p>
+<a type="button" class="btn btn-success"  href="{{ url_for('carts.orderCart') }}" >Place Order</a> 
+
+<!-- Modal -->
+<div class="modal fade modal-two" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Change Item Quantity</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form id="quant_form" action="" method="post">
+          {{ quant_form.hidden_tag() }}
+          <p>
+            {{ quant_form.product.label }}<br/>
+            {{ quant_form.product(size=32) }}<br/>
+            {% for error in quant_form.product.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+          </p>
+          <p>
+            {{ quant_form.quantity.label }}<br/>
+            {{ quant_form.quantity(size=32) }}<br/>
+            {% for error in quant_form.quantity.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+          </p>
+          <input type="submit" class="btn btn-success" value="Update"/>
+          <!--<p>{{ quant_form.submit() }}</p> -->
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade modal-one" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Remove Item</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form id="rem_form" action="" method="post">
+          {{ rem_form.hidden_tag() }}
+          <p>
+            {{ rem_form.product.label }}<br/>
+            {{ rem_form.product(size=32) }}<br/>
+            {% for error in rem_form.product.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+          </p>
+          <input type="submit" class="btn btn-danger" value="Remove"/>
+          <!-- <p>{{ rem_form.submit() }}</p> -->
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+ 
+<p></p>
+
+<h1>My Purchases</h1>
+<h6>Click a purchase time to see the details of your order!</h6>
+
+<table class='table table-hover table-bordered container'>
+  <thead class="thead">
+    <tr style="color:#ffffff">
+      <!--<th scope="col">Id</th> -->
+      <!--<th scope="col">Uid</th> -->
+      <th scope="col">Time of Purchase</th>
+      <th scope="col">Total Quantity</th>
+      <th scope="col">Total Price</th>
+      <th scope="col">Order Fulfilled?</th>
+      <th scope="col">Product</th>
+      <th scope="col">Seller</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in purchases%}
+      <tr style="color:#ffffff">
+        <td><a style="color:#270682" href="{{ url_for('carts.order_page', uid = p.uid, time = p.time) }}">{{p.time}}</a></td>
+        <td>{{p.quantity}}</td>
+        <td>${{p.price}}</td>
+        <td>{{p.order_status}}</td>
+        <td><a style="color:#270682" href="{{ url_for('products.product_page', pid = p.pid) }}">{{p.name}}</a></td>
+        <td><a style="color:#270682" href="{{ url_for('users.showPublicView', uid = p.sid) }}">{{p.seller}}</a></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<p><a href="{{ url_for('index.index') }}">Back to the Home Page!</a></p>
+
+{% endblock %}

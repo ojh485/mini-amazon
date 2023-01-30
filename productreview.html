@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>{{title}}</h1>
+
+<!-- create form here for new review -->
+<h3>Leave a Review</h3>=
+<form action="" method="post">
+  {{ form.hidden_tag() }}
+  <p>
+    {{ form.stars.label }}<br/>
+    {{ form.stars(size=32) }}<br/>
+    {% for error in form.stars.errors %}
+    <span style="color: red;">[{{ error }}]</span>
+    {% endfor %}
+  </p>
+  <p>
+    {{ form.review.label }}<br/>
+    {{ form.review(size=32) }}<br/>
+    {% for error in form.review.errors %}
+    <span style="color: red;">[{{ error }}]</span>
+    {% endfor %}
+  </p>
+  <p>{{ form.submit() }}</p>
+</form>

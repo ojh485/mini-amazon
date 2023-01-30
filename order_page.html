@@ -1,0 +1,45 @@
+{% extends "cart.html" %}
+
+{% block content %}
+
+<p></p>
+<h1>Here is your order from {{date}} at {{tod}}!</h1>
+
+<style>
+    .table{
+      background-color:  #00aeff;
+    }
+    .table thead{
+      background-color:  #313baf;
+    }
+  </style>
+
+<table class='table table-hover table-bordered container'>
+  <thead class="thead">
+    <tr style="color:#ffffff">
+      <!--<th scope="col">Id</th> -->
+      <!--<th scope="col">Uid</th> -->
+      <th scope="col">Product</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Price Per Unit</th>
+      <th scope="col">Seller</th>
+      <th scope="col">Item Fulfilled?</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in order%}
+      <tr style="color:#ffffff">
+        <td><a style="color:#270682" href="{{ url_for('products.product_page', pid=p.pid) }}" >{{p.name}}</a></td>
+        <td>{{p.quantity}}</td>
+        <td>${{p.price}}</td>
+        <td><a style="color:#270682" href="{{ url_for('users.showPublicView', uid=p.sid) }}" >{{p.seller}}</a></td>
+        <td>{{p.item_status}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<p><a href="{{ url_for('carts.findCart') }}">Back to the Cart!</a></p>
+<p><a href="{{ url_for('index.index') }}">Back to the Home Page!</a></p>
+
+{% endblock %}

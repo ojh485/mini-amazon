@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Mini Amazon</title>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/example.css') }}">
+
+<!-- 
+  Styling used throughout the entire project 
+-->
+  <style>
+    body {
+        font-family: "Lato", sans-serif;
+    }
+
+    .centered {
+        position: fixed;
+        top: 50%;
+        width: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 0 solid rgba(0,0,0,.125);
+        border-radius: .25rem;
+    }   
+
+    .main-head {
+        height: 150px;
+        background: #FFF;
+    }
+
+    .sidenav {
+        height: 100%;
+        background: -webkit-linear-gradient(left, #3931af, #00c6ff);;
+        overflow-x: hidden;
+        padding-top: 20px;
+    }
+
+    .main {
+        padding: 0px 10px;
+    }
+
+    .login-main-text {
+        margin-top: 20%;
+        padding: 60px;
+        color: #fff;
+    }
+
+    .login-main-text h2 {
+        font-weight: 300;
+    }
+
+    .btn-black {
+        background-color: #000;
+        color: #fff;
+    }
+
+    /* Style the links inside the navigation bar */
+    .topnav a {
+      float: left;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      font-size: 17px;
+    }
+
+    .btn-primary {
+      color: #f2f2f2;
+      background-color: transparent;
+      border:#000
+    }
+
+    .btn-primary:hover {
+      color: #1652f0;
+      background-color:  #f2f2f2;
+    }
+
+    .btn-secondary {
+      background-color:  #1652f0;
+    }
+
+    body{
+      color: #1a202c;
+      text-align: left;
+      background-color: #e2e8f0;    
+    }
+    .main-body {
+        padding: 15px;
+    }
+
+    .card {
+        box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 0 solid rgba(0,0,0,.125);
+        border-radius: .25rem;
+    }
+
+    .card-body {
+        flex: 1 1 auto;
+        min-height: 1px;
+        padding: 1rem;
+    }
+
+    .gutters-sm {
+        margin-right: -8px;
+        margin-left: -8px;
+    }
+
+    .gutters-sm>.col, .gutters-sm>[class*=col-] {
+        padding-right: 8px;
+        padding-left: 8px;
+    }
+    .mb-3, .my-3 {
+        margin-bottom: 1rem!important;
+    }
+
+    .bg-gray-300 {
+        background-color: #e2e8f0;
+    }
+    .h-100 {
+        height: 100%!important;
+    }
+    .shadow-none {
+        box-shadow: none!important;
+    }
+
+    .text-secondary {
+      color:  #1652f0;
+    }
+
+    .emp-profile{
+        background: #fff;
+        width: 1100px;
+        margin-bottom: 25px;
+    }
+    .profile-img{
+        text-align: center;
+    }
+    .profile-img img{
+        width: 70%;
+        height: 100%;
+    }
+    .profile-img .file {
+        position: relative;
+        overflow: hidden;
+        margin-top: -20%;
+        width: 70%;
+        border: none;
+        border-radius: 0;
+        font-size: 15px;
+        background: #212529b8;
+    }
+    .profile-img .file input {
+        position: absolute;
+        opacity: 0;
+        right: 0;
+        top: 0;
+    }
+    .profile-head h5{
+        color: #333;
+    }
+    .profile-head h6{
+        color: #0062cc;
+    }
+    .profile-edit-btn{
+        border: none;
+        border-radius: 1.5rem;
+        width: 70%;
+        padding: 2%;
+        font-weight: 600;
+        color: #6c757d;
+        cursor: pointer;
+    }
+    .proile-rating{
+        font-size: 12px;
+        color: #818182;
+        margin-top: 5%;
+    }
+    .proile-rating span{
+        color: #495057;
+        font-size: 15px;
+        font-weight: 600;
+    }
+    .profile-head .nav-tabs{
+        margin-bottom:5%;
+    }
+    .profile-head .nav-tabs .nav-link{
+        font-weight:600;
+        border: none;
+    }
+    .profile-head .nav-tabs .nav-link.active{
+        border: none;
+        border-bottom:2px solid #0062cc;
+    }
+    .profile-work{
+        padding: 14%;
+        margin-top: -15%;
+    }
+    .profile-work p{
+        font-size: 12px;
+        color: #818182;
+        font-weight: 600;
+        margin-top: 10%;
+    }
+    .profile-work a{
+        text-decoration: none;
+        color: #495057;
+        font-weight: 600;
+        font-size: 14px;
+    }
+    .profile-work ul{
+        list-style: none;
+    }
+    .profile-tab label{
+        font-weight: 600;
+    }
+    .profile-tab p{
+        font-weight: 600;
+        color: #0062cc;
+    }
+   
+    
+  </style>
+</head>
+
+<body>
+  <div class="sidenav">
+    {% block msg %}
+      <div style="color: aliceblue; margin-bottom: 10px; display: flex; justify-content: space-between;">
+        <div><a href="{{ url_for('index.index') }}" ><img src="../static/real_logo.png" width="350" height="60"></a></div>
+        {% if current_user.is_authenticated %}
+          <div class="topnav">
+            <a type="button" class="btn btn-primary" href="{{ url_for('users.updateAccount') }}">Account</a>
+            <!-- <a type="button" class="btn btn-primary" href="{{ url_for('users.showPublicView', uid=3) }}">TEST</a> -->
+            <a type="button" class="btn btn-primary"  href="{{ url_for('carts.findCart') }}">Cart</a>
+            <a type="button" class="btn btn-primary" href="{{ url_for('sellers.seller_home_page') }}">Inventory</a>
+            <a type="button" class="btn btn-primary"  href="{{ url_for('users.logout') }}" >Log out</a>
+          </div>
+        {% else %}
+        <div class="topnav"><a type="button" class="btn btn-primary"  href="{{ url_for('users.login') }}">Log in</a></div>
+        {% endif %}
+      </div>
+    {% endblock %}
+  </div>
+  <div class="main">
+    {% block content %}{% endblock %}
+  </div>
+</body>
+
+</html>
